@@ -1,0 +1,5 @@
+/node_modules
+.env
+.env.db.docker
+
+package-lock.json
