@@ -5,8 +5,8 @@ class ApplicationsService {
   constructor() { }
 
   async getApplication(id) {
-    let application = await models.Applications.scope('get_application').findByPk(id, {raw: true});
-    if (!application) throw new CustomError('Not Found Appliction', 404, 'Not Found');
+    let application = await models.Applications.findByPk(id, {raw: true});
+    if (!application) throw new CustomError('Not Found Application', 404, 'Not Found');
     return application;
   }
 
@@ -48,7 +48,7 @@ class ApplicationsService {
   async getStatusAppliction(id){
     let {status} = await models.Applications.scope('view_status').findByPk(id);
     if(!status) throw new CustomError('Not found Appplication', 404, 'Not Found')
-    if(status === 'confirmed') throw new CustomError('Not found user', 404, 'Not Found');
+    if(status === 'confirmed') throw new CustomError('Not found user', 403, 'Not Found');
     return status;
   }
 

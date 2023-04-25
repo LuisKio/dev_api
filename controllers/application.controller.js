@@ -1,5 +1,4 @@
 const ApplicationsService = require('../services/applications.service');
-const { CustomError } = require('../utils/helpers');
 
 const appService = new ApplicationsService();
 
@@ -8,7 +7,9 @@ const getApplication = async (request, response, next) => {
 
   try {
     const application = await appService.getApplication(id);
-    response.status(200).json(application);
+    response.status(200).json({
+      results: application
+    });
   } catch (error) {
     next(error);
   }
@@ -19,10 +20,6 @@ const createApplication = async (request, response, next) => {
   try {
     let { body } = request;
     let { id } = request.user;
-
-    for (let keyword in body) {
-      body[keyword] = body[keyword].toLowerCase();
-    }
 
     body.status = 'draft';
     body.user_id = id;
@@ -41,17 +38,15 @@ const createApplication = async (request, response, next) => {
 
 const updateApplication = async (request, response, next) => {
   try {
-    let {id} = request.user;
-    let {body} = request;
-    
-    // Verifica si la aplicacion existe y si el estado es diferente a draft
-    await appService.getStatusAppliction(id);
+    let { id } = request.user;
+    let { body } = request;
 
-    for (let keyword in body) {
-      body[keyword] = body[keyword].toLowerCase();
+    if (!body.user_id) {
+      //console.log('entro');
+      // Verifica si la aplicacion existe y si el estado es diferente a draft
+      await appService.getStatusAppliction(id);
+      let updateApp = await appService.updateApplication(id, body);
     }
-
-    let updateApp = await appService.updateApplication(id, body);
 
     return response.status(200).json({
       results: 'Updated app',

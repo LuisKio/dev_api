@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 const addApplicationSchema = Joi.object({
+  user_id: Joi.string().uuid(),
   legal_first_names: Joi.string().required(),
   legal_last_names: Joi.string().required(),
   nationality: Joi.string().required(),
@@ -17,6 +18,7 @@ const addApplicationSchema = Joi.object({
 });
 
 const updateApplicationSchema = Joi.object({
+  user_id: Joi.string().uuid(),
   legal_first_names: Joi.string(),
   legal_last_names: Joi.string(),
   nationality: Joi.string(),
@@ -30,6 +32,7 @@ const updateApplicationSchema = Joi.object({
   residence_address: Joi.string(),
   job: Joi.string(),
   comments: Joi.string(),
+  status: Joi.string().valid('draft', 'confirmed')
 });
 
 module.exports = {

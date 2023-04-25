@@ -10,7 +10,8 @@ const {
 
 function routerErrorHandler(app) {
   /* Apply Middlewares */
-  app.use(logErrors);
+  // Se loguearan errores en otros ambientes pero no en test
+  if (process.env.NODE_ENV != 'test') app.use(logErrors);
   app.use(handlerAuthError);
   app.use(ormErrorHandler);
   app.use(errorHandler);
