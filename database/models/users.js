@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class Users extends Model {
     static associate(models) {
       Users.hasMany(models.UsersStripe, {as: 'stripe_client', foreignKey: 'user_id'});
+      Users.hasOne(models.Applications, {as: 'application', foreignKey: 'user_id'})
     }
   }
   Users.init({

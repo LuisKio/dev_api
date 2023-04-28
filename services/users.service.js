@@ -171,6 +171,39 @@ class UsersService {
     }
   }
 
+  //stripe
+
+  async getUserStripeClient(id) {
+    let user = await models.Users.findByPk(id, {
+      attributes: ['id', 'email'],
+      include: [
+        {
+          model: models.UsersStripe,
+          as: 'stripe_client'
+        }
+      ],
+    })
+    if (!user) throw new CustomError('Not found User', 404, 'Not Found')
+    return user
+  }
+
+
+  async createStripeClient(id, customer) {
+    const transaction = await models.sequelize.transaction()
+    try{
+      let user = await models.Users.findByPk(id)
+      if (!user) throw new CustomError('Not found User', 404, 'Not Found')
+      
+      await user.createStripe_client({user_id: user.id, client_id:customer}, { transaction })
+      await transaction.commit()
+      
+      return user
+    } catch(error) {
+      await transaction.rollback()
+      throw error
+    }
+    
+  }
 }
 
 module.exports = UsersService

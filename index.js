@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
+const bodyParser = require('body-parser')
 require('dotenv').config()
 
 const routerModels = require('./routes/models.router')
@@ -55,6 +56,12 @@ Accept Json & form-urlencoded
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
+app.use(bodyParser.json({
+  verify: (request, response, buf) => {
+    request.rawBody = buf
+  }
+}))
+app.use(express.urlencoded({ extended: true }))
 /* 
     Tell everyone the state of your api
 */
