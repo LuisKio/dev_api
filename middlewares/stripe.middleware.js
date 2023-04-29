@@ -1,8 +1,13 @@
+const ApplicationsService = require("../services/applications.service");
+const UsersService = require("../services/users.service");
+
+const applicationsService = new ApplicationsService()
+const userService = new UsersService()
 const getOrCreateStripeUserByEmail = async (request, response, next) => {
     try {
       let { id, email } = request.user
       
-      let user = await usersService.getUserStripeClient(id)
+      let user = await userService.getUserStripeClient(id)
       if (user.stripe_client) {
         return next()
       }
@@ -12,7 +17,7 @@ const getOrCreateStripeUserByEmail = async (request, response, next) => {
         email
       });
   
-      let createClient = await usersService.createStripeClient(id, customer.id)
+      let createClient = await UsersService.createStripeClient(id, customer.id)
   
       return next()
     } catch (error) {

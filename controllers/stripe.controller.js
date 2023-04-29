@@ -1,12 +1,20 @@
+const ProductsService = require("../services/products.services")
+const UsersService = require("../services/users.service")
+const { CustomError } = require("../utils/helpers")
+
+
+const userService = new UsersService()
+const productService = new ProductsService()
+
 const stripeCheckout = async (request, response, next) => {
     try {
   
       let { id } = request.user
   
       /* We checked in the middleware before that, user will always have one */
-      let userClient = await usersService.getUserStripeClient(id)
+      let userClient = await userService.getUserStripeClient(id)
   
-      let products = await productssService.returnProducts()
+      let products = await productService.returnProducts()
   
       if (products.length == 0) throw new CustomError('Not Products on the local DB', 500, 'Application Error')
   

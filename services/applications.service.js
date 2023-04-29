@@ -4,6 +4,13 @@ const { CustomError } = require('../utils/helpers');
 class ApplicationsService {
   constructor() { }
 
+  async getApplicationOr404raw(id) {
+    let application = await models.Applications.findByPk(id, {raw: true});
+    if (!application) throw new CustomError('Not Found Application', 404, 'Not Found');
+    return application;
+  }
+
+
   async getApplication(id) {
     let application = await models.Applications.findByPk(id, {raw: true});
     if (!application) throw new CustomError('Not Found Application', 404, 'Not Found');
