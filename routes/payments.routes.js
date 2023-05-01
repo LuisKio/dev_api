@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('../libs/passport');
-const { applicationIsConfirmedOrErr, getOrCreateStripeUserByEmail } = require('../middlewares/stripe.middleware');
-const { stripeCheckout } = require('../controllers/stripe.controller');
+const { applicationIsConfirmedOrErr, getOrCreateStripeUserByEmail, stripeCheckout } = require('../middlewares/stripe.middleware');
 
 router
   .route('/pay-product')

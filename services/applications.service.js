@@ -1,18 +1,19 @@
 const models = require('../database/models');
 const { CustomError } = require('../utils/helpers');
+const { ApplicationStatus } = require('../utils/magicDictionary');
 
 class ApplicationsService {
   constructor() { }
 
   async getApplicationOr404raw(id) {
-    let application = await models.Applications.findByPk(id, {raw: true});
+    let application = await models.Applications.findByPk(id, { raw: true });
     if (!application) throw new CustomError('Not Found Application', 404, 'Not Found');
     return application;
   }
 
 
   async getApplication(id) {
-    let application = await models.Applications.findByPk(id, {raw: true});
+    let application = await models.Applications.findByPk(id, { raw: true });
     if (!application) throw new CustomError('Not Found Application', 404, 'Not Found');
     return application;
   }
@@ -21,9 +22,9 @@ class ApplicationsService {
     const transaction = await models.sequelize.transaction();
     try {
       let newApplication = await models.Applications.create(
-        data, 
+        data,
         {
-          transaction, 
+          transaction,
           fields: [
             'user_id',
             'legal_first_names',
@@ -52,14 +53,14 @@ class ApplicationsService {
     }
   }
 
-  async getStatusAppliction(id){
-    let {status} = await models.Applications.scope('view_status').findByPk(id);
-    if(!status) throw new CustomError('Not found Appplication', 404, 'Not Found')
-    if(status === 'confirmed') throw new CustomError('Not found user', 403, 'Not Found');
+  async getStatusAppliction(id) {
+    let { status } = await models.Applications.scope('view_status').findByPk(id);
+    if (!status) throw new CustomError('Not found Appplication', 404, 'Not Found')
+    if (status === ApplicationStatus.CONFIRMED) throw new CustomError('Not found user', 403, 'Not Found');
     return status;
   }
 
-  async updateApplication(id, data){
+  async updateApplication(id, data) {
     const transaction = await models.sequelize.transaction();
     try {
       let updateApplication = await models.Applications.update(data, {
@@ -101,7 +102,7 @@ class ApplicationsService {
 
       if (!application) throw new CustomError('Not found Application', 404, 'Not Found')
 
-      await application.createPayment({application_id:user_id, payment_intent:payment_intent},{ transaction })
+      await application.createPayment({ application_id: user_id, payment_intent: payment_intent }, { transaction })
 
       await transaction.commit()
 
@@ -110,8 +111,8 @@ class ApplicationsService {
       await transaction.rollback()
       throw error
     }
-  
-}
+
+  }
 }
 
 module.exports = ApplicationsService;

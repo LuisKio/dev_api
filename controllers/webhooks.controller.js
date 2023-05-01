@@ -1,13 +1,14 @@
-const { CustomError } = require('../utils/helpers')
-const { stripeLocal } = require('../libs/stripe')
+const { CustomError } = require('../utils/helpers');
+const { stripeLocal } = require('../libs/stripe');
 
-const ApplicationsService = require('../services/applications.service')
-const UsersService = require('../services/users.service')
+const ApplicationsService = require('../services/applications.service');
+const UsersService = require('../services/users.service');
+const {stripeStatus} = require('../utils/magicDictionary');
 
-const applicationsService = new ApplicationsService()
-const usersService = new UsersService()
+const applicationsService = new ApplicationsService();
+const usersService = new UsersService();
 
-require('dotenv').config()
+require('dotenv').config();
 
 const endpointSecret = process.env.STRIPE_CLI_WEBHOOK_SECRET;
 
@@ -33,7 +34,7 @@ const stripeWebhook = async (request, response, next) => {
   case 'checkout.session.completed':{
     let paid = event.data.object.payment_status
 
-    if(paid == 'paid') {
+    if(paid === stripeStatus.PAID) {
       let payment_intent = event.data?.object?.payment_intent
       let client_id = event.data?.object?.customer
 
@@ -51,5 +52,5 @@ const stripeWebhook = async (request, response, next) => {
 };
 
 module.exports = {
-    stripeWebhook
+  stripeWebhook
 }
