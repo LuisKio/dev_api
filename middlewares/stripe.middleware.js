@@ -20,7 +20,7 @@ const getOrCreateStripeUserByEmail = async (request, response, next) => {
     }
 
     /* Si no tiene un Client, le creara uno */
-    const customer = await stripeLocal.customer.create({
+    const customer = await stripeLocal.customers.create({
       email
     });
 
@@ -46,7 +46,7 @@ const stripeCheckout = async (request, response, next) => {
     const session = await stripeLocal.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      currency: 'mxn',
+      currency: 'usd',
       customer: userClient.stripe_client?.client_id,
       line_items: [{
         price: products[0].price_id,
