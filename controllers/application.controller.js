@@ -283,6 +283,22 @@ const removeApplicationDocuments = async (request, response, next) => {
   }
 }
 
+const getFile = async (request, response, next) => {
+  try {
+    const { key } = request.query;
+    const blob = await getFileStream(key);
+
+    // Get Signed URL ~ AWS -
+
+    return response.send(blob);
+  } catch (error) {
+    next(error);
+  }
+};
+
+//  const blob = new Blob([e.data], { type: 'application/pdf' });
+//  setContractURL(URL.createObjectURL(blob));
+
 
 
 
@@ -293,5 +309,6 @@ module.exports = {
   uploadDocumentApplication,
   uploadPhotoApplication,
   removeApplicationDocuments,
-  removeApplicationPhoto
+  removeApplicationPhoto,
+  getFile
 }

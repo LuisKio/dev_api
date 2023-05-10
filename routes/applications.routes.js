@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getApplication, createApplication, updateApplication, uploadPhotoApplication, uploadDocumentApplication, removeApplicationPhoto, removeApplicationDocuments } = require('../controllers/application.controller');
+const { getApplication, getFile, createApplication, updateApplication, uploadPhotoApplication, uploadDocumentApplication, removeApplicationPhoto, removeApplicationDocuments } = require('../controllers/application.controller');
 
 const passport = require('../libs/passport');
 const verifySchema = require('../schemas/joiSchema.checker');
@@ -8,7 +8,6 @@ const { addApplicationSchema, updateApplicationSchema } = require('../schemas/ap
 const { multerApplicationsDocuments, multerApplicationsPhotos } = require('../middlewares/multer.middleware');
 const { applicationIsNotConfirmed } = require('../middlewares/business_checker.middleware');
 const { keyIsPhotoResource, keyIsDocumentResource, keyPhotoIsSameUser, keyDocumentIsSameUser } = require('../middlewares/s3-resource-validator.middleware');
-const { getFileStream } = require('../libs/s3');
 
 
 
@@ -42,10 +41,10 @@ router.route('/remove-document/:order')
   .delete(applicationIsNotConfirmed, removeApplicationDocuments)
 
 router.route('/read-photo')
-  .get(keyIsPhotoResource, keyPhotoIsSameUser,getFileStream)
+  .get(keyIsPhotoResource, keyPhotoIsSameUser,getFile)
 
 router.route('/read-document')
-  .get(keyIsDocumentResource, keyDocumentIsSameUser, getFileStream)
+  .get(keyIsDocumentResource, keyDocumentIsSameUser, getFile)
 
 
 module.exports = router;

@@ -46,7 +46,7 @@ function getFileStream (Key) {
   return new Promise(async (resolve, reject) => {
     const getObjectCommand = new GetObjectCommand({ 
       Bucket: bucketName, 
-      Key: Key._parsedUrl.search
+      Key
     })
 
     try {
