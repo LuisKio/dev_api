@@ -46,7 +46,7 @@ const stripeCheckout = async (request, response, next) => {
     const session = await stripeLocal.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      currency: 'usd',
+      currency: 'mxn',
       customer: userClient.stripe_client?.client_id,
       line_items: [{
         price: products[0].price_id,

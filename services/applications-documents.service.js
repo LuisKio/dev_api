@@ -9,7 +9,7 @@ class ApplicationDocumentsService {
     
     let availableValues = [1,2,3]
     
-    let documents = await models.ApplicationsDocuments.findAll({
+    let documents = await models.ApplicationDocuments.findAll({
       attributes: {exclude:['created_at','updated_at']},
       where: {application_id}, 
       raw: true
@@ -30,7 +30,7 @@ class ApplicationDocumentsService {
     const transaction = await models.sequelize.transaction()
     
     try {  
-      let newDocument = await models.ApplicationsDocuments.create({ application_id, url, order }, { transaction })
+      let newDocument = await models.ApplicationDocuments.create({ application_id, url, order }, { transaction })
       await transaction.commit();
       return newDocument
     } catch (error) {
@@ -41,7 +41,7 @@ class ApplicationDocumentsService {
   }
 
   async getDocumentOr404(application_id, order) {
-    const applicationDocument = await models.ApplicationsDocuments.findOne({ where: { application_id, order: parseInt(order) }});
+    const applicationDocument = await models.ApplicationDocuments.findOne({ where: { application_id, order: parseInt(order) }});
     if (!applicationDocument) throw new CustomError('Not Found Application Document with this order', 404, 'Not Found');
     return applicationDocument
   }
@@ -49,7 +49,7 @@ class ApplicationDocumentsService {
   async removeDocument(application_id, order) {
     const transaction = await models.sequelize.transaction()
     try {
-      let application = await models.ApplicationsDocuments.findOne({
+      let application = await models.ApplicationDocuments.findOne({
         where: { application_id, order: parseInt(order) },
       }, { transaction });
 

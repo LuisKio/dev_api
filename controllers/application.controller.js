@@ -81,12 +81,13 @@ const uploadPhotoApplication = async (request, response, next) => {
   
   const application_id = request.user.id
   const files = request.files;
+
   try {
-    if (files.length < 1) throw new CustomError('No images received', 400, 'Bad Request');
+    if (!files) throw new CustomError('No images received', 400, 'Bad Request');
 
     let imagesKeys = [];
     let imagesErrors = [];
-
+ 
     let openSpots = await applicationsPhotosService.getAvailablePhotosOrders(application_id)
 
     await Promise.all(

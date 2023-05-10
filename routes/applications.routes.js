@@ -30,22 +30,22 @@ router.put(
 );
 
 router.route('/add-photo')
-  .post(passport.authenticate('jwt', { session: false }), applicationIsNotConfirmed, multerApplicationsPhotos.array('photos',3), uploadPhotoApplication)
+  .post(applicationIsNotConfirmed, multerApplicationsPhotos.array('photos',3), uploadPhotoApplication)
 
 router.route('/add-document')
-  .post(passport.authenticate('jwt', { session: false }), applicationIsNotConfirmed, multerApplicationsDocuments.array('documents',3), uploadDocumentApplication)
+  .post(applicationIsNotConfirmed, multerApplicationsDocuments.array('documents',3), uploadDocumentApplication)
 
 router.route('/remove-photo/:order')
-  .delete(passport.authenticate('jwt', { session: false }), applicationIsNotConfirmed, removeApplicationPhoto)
+  .delete(applicationIsNotConfirmed, removeApplicationPhoto)
 
 router.route('/remove-document/:order')
-  .delete(passport.authenticate('jwt', { session: false }), applicationIsNotConfirmed, removeApplicationDocuments)
+  .delete(applicationIsNotConfirmed, removeApplicationDocuments)
 
 router.route('/read-photo')
-  .get(passport.authenticate('jwt', { session: false }), keyIsPhotoResource, keyPhotoIsSameUser,getFileStream)
+  .get(keyIsPhotoResource, keyPhotoIsSameUser,getFileStream)
 
 router.route('/read-document')
-  .get(passport.authenticate('jwt', { session: false }), keyIsDocumentResource, keyDocumentIsSameUser, getFileStream)
+  .get(keyIsDocumentResource, keyDocumentIsSameUser, getFileStream)
 
 
 module.exports = router;

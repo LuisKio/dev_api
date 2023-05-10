@@ -6,14 +6,15 @@ class ApplicationPhotosService {
   constructor () {}
 
   async getAvailablePhotosOrders(application_id) {
-    
     let availableValues = [1,2,3]
     
-    let images = await models.ApplicationsPhotos.findAll({
+    let images = await models.ApplicationPhotos.findAll({
       attributes: {exclude:['created_at','updated_at']},
       where: {application_id}, 
       raw: true
-    })
+    });
+
+    console.log(images);
 
     if (!images) return availableValues
     if (images.length == 0) return availableValues
@@ -31,7 +32,7 @@ class ApplicationPhotosService {
     const transaction = await models.sequelize.transaction()
     
     try {  
-      let newImage = await models.ApplicationsPhotos.create({ application_id, url, order }, { transaction })
+      let newImage = await models.ApplicationPhotos.create({ application_id, url, order }, { transaction })
       await transaction.commit();
       return newImage
     } catch (error) {
@@ -41,7 +42,7 @@ class ApplicationPhotosService {
 
   }
   async getPhotoOr404(application_id, order) {
-    const applicationImage = await models.ApplicationsPhotos.findOne({ where: { application_id, order: parseInt(order) }});
+    const applicationImage = await models.ApplicationPhotos.findOne({ where: { application_id, order: parseInt(order) }});
     if (!applicationImage) throw new CustomError('Not Found Application Image with this order', 404, 'Not Found');
     return applicationImage
 
@@ -51,7 +52,7 @@ class ApplicationPhotosService {
     const transaction = await models.sequelize.transaction()
     try {
 
-      let application = await models.ApplicationsPhotos.findOne({
+      let application = await models.ApplicationPhotos.findOne({
         where: { application_id, order: parseInt(order) },
       }, { transaction });
 

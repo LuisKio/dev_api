@@ -46,16 +46,15 @@ function getFileStream (Key) {
   return new Promise(async (resolve, reject) => {
     const getObjectCommand = new GetObjectCommand({ 
       Bucket: bucketName, 
-      Key 
+      Key: Key._parsedUrl.search
     })
 
     try {
       const response = await s3Client.send(getObjectCommand)
-  
       // Store all of data chunks returned from the response data stream 
       // into an array then use Array#join() to use the returned contents as a String
       let responseDataChunks = []
-
+      
       // Handle an error while streaming the response body
       response.Body.once('error', err => reject(err))
   
